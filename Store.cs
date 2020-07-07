@@ -19,7 +19,7 @@ namespace QA_BandWebsite
         [TestInitialize]
         public void TestIntialize()
         {
-            //Tests Run against local instace of my site
+            //Tests Run against local instance of my site
             GetDriver("Chrome", "http://localhost:3000/store");
 
             //TODO Add Timer to tests to output in logs
@@ -37,7 +37,7 @@ namespace QA_BandWebsite
                     var stackTrace = error[1];
 
                     Console.WriteLine($"Error Message: {errorMessage} StackTrace: {stackTrace}");
-                    //take screenshot of failure
+                    //take screen-shot of failure
                     CaptureScreenshot(TestContext.TestResultsDirectory + "\\" + TestContext.TestName + "_Failure.png");
                 }
                 catch (Exception e)
