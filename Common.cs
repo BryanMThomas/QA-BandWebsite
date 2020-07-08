@@ -5,6 +5,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using System.Collections.Generic;
+using OpenQA.Selenium.Support.UI;
+using System.Threading;
+using OpenQA.Selenium.DevTools.Network;
 
 namespace QA_BandWebsite
 {
@@ -71,5 +74,33 @@ namespace QA_BandWebsite
             screenshot.SaveAsFile(path, ScreenshotImageFormat.Png);
         }
 
+        public IWebElement GetControl(IWebDriver driver, By byStatement, int timeOut = 30)
+        {
+            IWebElement webElement = null;
+            try
+            {
+                WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(timeOut));
+                webElement = wait.Until(d =>
+                {
+                    for (int attempts = 0; attempts < 3; attempts++)
+                    {
+
+                        try
+                        {
+                            wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementExists(byStatement));
+                            webElement = wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(byStatement));
+                            return webElement;
+                        }
+                        catch (StaleElementReferenceException)
+                        {
+                            Thread.Sleep(500);
+                        }
+                    }
+                    return null;
+                });
+            }
+            catch (WebDriverTimeoutException) { }
+            return webElement;
+        }
     }
 }
