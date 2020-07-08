@@ -24,6 +24,12 @@ namespace QA_BandWebsite
         public IWebElement TxtShopItemPrice(int index = 0, int timeOut = 30) { return GetControl(driver, By.XPath("//*[contains(@id,'shop-item-price-" + index + "')]"), timeOut); }
         public IWebElement BtnShopItemAddToCart(int index = 0, int timeOut = 30) { return GetControl(driver, By.XPath("//*[contains(@id,'shop-item-button-" + index + "')]"), timeOut); }
 
+        //Cart
+        public IWebElement TxtEmptyCart(int timeOut = 30) { return GetControl(driver, By.Id("empty-cart"), timeOut); }
+        public IWebElement TxtCartTotal(int timeOut = 30) { return GetControl(driver, By.Id("cart-total"), timeOut); }
+        public IWebElement TxtCartTotalPrice(int timeOut = 30) { return GetControl(driver, By.Id("cart-total-price"), timeOut); }
+        public IWebElement BtnPurchase(int timeOut = 30) { return GetControl(driver, By.ClassName("button-purchase"), timeOut); }
+
         #endregion
 
         #region Methods
