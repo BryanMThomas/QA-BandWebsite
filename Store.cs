@@ -60,6 +60,59 @@ namespace QA_BandWebsite
             Assert.IsNull(StoreControls.BtnPurchase(2), "Found purchase button when cart was empty");
         }
 
+        [TestMethod, Description("Verifies behavior for Adding Items to the Cart - TC004")]
+        [TestCategory("Regression")]
+        public void AddItemsCartStorePage()
+        {
+            #region First item
+            // Add an item to the Cart 
+            StoreControls.BtnShopItemAddToCart().Click();
+            // Verify cart item added
+            Assert.IsTrue(StoreControls.TxtCartItems().Count == 1, $"Cart item not added after add to cart was selected. Expected Count: 1 Actual: {StoreControls.TxtCartItems().Count}");
+            Assert.IsNotNull(StoreControls.TxtCartItemTitle(), "Did not find title for cart item on store page.");
+            Assert.IsNotNull(StoreControls.ImgCartItemImage(), "Did not find image for cart item on store page.");
+            Assert.IsNotNull(StoreControls.TxtCartItemPrice(), "Did not find price for cart item on store page.");
+            Assert.IsNotNull(StoreControls.TxtCartItemQuantity(), "Did not find quantity for shop item on store page.");
+            // Verify quantity
+            Assert.IsTrue(StoreControls.TxtCartItemQuantity().GetAttribute("value").Equals("1"), $"Quantity was not as expected. Expected Count: 1 Actual: {StoreControls.TxtCartItemQuantity().Text}");
+            // Verify total is increased
+            var actualTotal = float.Parse(StoreControls.TxtCartTotalPrice().Text.Replace("$", ""));
+            var expectedTotal = int.Parse(StoreControls.TxtCartItemQuantity().GetAttribute("value")) * float.Parse(StoreControls.TxtCartItemPrice().Text.Replace("$", ""));
+            Assert.IsTrue(expectedTotal == actualTotal, $"Did not find expected total in cart after adding an item to the cart Expected: {expectedTotal} Actual: {actualTotal}");
+            #endregion
+
+            #region Second Item
+            // Add another unique item to the cart
+            StoreControls.BtnShopItemAddToCart(4).Click();
+            // Verify cart item added
+            Assert.IsTrue(StoreControls.TxtCartItems().Count == 2, $"Cart item not added after add to cart was selected. Expected Count: 2 Actual: {StoreControls.TxtCartItems().Count}");
+            Assert.IsNotNull(StoreControls.TxtCartItemTitle(1), "Did not find title for cart item on store page.");
+            Assert.IsNotNull(StoreControls.ImgCartItemImage(1), "Did not find image for cart item on store page.");
+            Assert.IsNotNull(StoreControls.TxtCartItemPrice(1), "Did not find price for cart item on store page.");
+            Assert.IsNotNull(StoreControls.TxtCartItemQuantity(1), "Did not find quantity for shop item on store page.");
+            // Verify quantity
+            Assert.IsTrue(StoreControls.TxtCartItemQuantity(1).GetAttribute("value").Equals("1"), $"Quantity was not as expected. Expected Count: 1 Actual: {StoreControls.TxtCartItemQuantity(1).Text}");
+            // Verify total is increased
+            actualTotal = float.Parse(StoreControls.TxtCartTotalPrice().Text.Replace("$", ""));
+            expectedTotal = expectedTotal + int.Parse(StoreControls.TxtCartItemQuantity(1).GetAttribute("value")) * float.Parse(StoreControls.TxtCartItemPrice(1).Text.Replace("$", ""));
+            Assert.IsTrue(expectedTotal == actualTotal, $"Did not find expected total in cart after adding a second item to the cart Expected: {expectedTotal} Actual: {actualTotal}");
+            #endregion
+
+            #region Duplicate Item
+            // Add another item that is already in the cart
+            StoreControls.BtnShopItemAddToCart().Click();
+            // Verify new cart item is not added
+            Assert.IsTrue(StoreControls.TxtCartItems().Count == 2, $"Additional cart item added after adding an item that was already in the cart. Expected Count: 2 Actual: {StoreControls.TxtCartItems().Count}");
+            // Verify quantity
+            Assert.IsTrue(StoreControls.TxtCartItemQuantity().GetAttribute("value").Equals("2"), $"Quantity was not as expected. Expected Count: 2 Actual: {StoreControls.TxtCartItemQuantity().Text}");
+            // Verify total is increased
+            actualTotal = float.Parse(StoreControls.TxtCartTotalPrice().Text.Replace("$", ""));
+            var item1Total = int.Parse(StoreControls.TxtCartItemQuantity().GetAttribute("value")) * float.Parse(StoreControls.TxtCartItemPrice().Text.Replace("$", ""));
+            var item2Total = int.Parse(StoreControls.TxtCartItemQuantity(1).GetAttribute("value")) * float.Parse(StoreControls.TxtCartItemPrice(1).Text.Replace("$", ""));
+            expectedTotal = item1Total + item2Total;
+            Assert.IsTrue(expectedTotal == actualTotal, $"Did not find expected total in cart after adding a second item to the cart Expected: {expectedTotal} Actual: {actualTotal}");
+            #endregion
+        }
 
         [TestInitialize]
         public void TestIntialize()

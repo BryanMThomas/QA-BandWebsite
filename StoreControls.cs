@@ -19,16 +19,23 @@ namespace QA_BandWebsite
 
         //Shop Items
         public IList<IWebElement> LstShopItems(int timeOut = 30) { return driver.FindElements(By.ClassName("shop-item")); }
-        public IWebElement TxtShopItemTitle(int index = 0, int timeOut = 30) { return GetControl(driver, By.XPath("//*[contains(@id,'shop-item-title-" + index + "')]"), timeOut); }
-        public IWebElement ImgShopItemImage(int index = 0, int timeOut = 30) { return GetControl(driver, By.XPath("//*[contains(@id,'shop-item-img-" + index + "')]"), timeOut); }
-        public IWebElement TxtShopItemPrice(int index = 0, int timeOut = 30) { return GetControl(driver, By.XPath("//*[contains(@id,'shop-item-price-" + index + "')]"), timeOut); }
-        public IWebElement BtnShopItemAddToCart(int index = 0, int timeOut = 30) { return GetControl(driver, By.XPath("//*[contains(@id,'shop-item-button-" + index + "')]"), timeOut); }
+        public IWebElement TxtShopItemTitle(int count = 1, int timeOut = 30) { return GetControl(driver, By.XPath("//*[contains(@id,'shop-item-title-" + count + "')]"), timeOut); }
+        public IWebElement ImgShopItemImage(int count = 1, int timeOut = 30) { return GetControl(driver, By.XPath("//*[contains(@id,'shop-item-img-" + count + "')]"), timeOut); }
+        public IWebElement TxtShopItemPrice(int count = 1, int timeOut = 30) { return GetControl(driver, By.XPath("//*[contains(@id,'shop-item-price-" + count + "')]"), timeOut); }
+        public IWebElement BtnShopItemAddToCart(int count = 1, int timeOut = 30) { return GetControl(driver, By.XPath("//*[contains(@id,'shop-item-button-" + count + "')]"), timeOut); }
 
         //Cart
         public IWebElement TxtEmptyCart(int timeOut = 30) { return GetControl(driver, By.Id("empty-cart"), timeOut); }
         public IWebElement TxtCartTotal(int timeOut = 30) { return GetControl(driver, By.Id("cart-total"), timeOut); }
         public IWebElement TxtCartTotalPrice(int timeOut = 30) { return GetControl(driver, By.Id("cart-total-price"), timeOut); }
         public IWebElement BtnPurchase(int timeOut = 30) { return GetControl(driver, By.ClassName("button-purchase"), timeOut); }
+
+        //Cart Item
+        public IList<IWebElement> TxtCartItems(int timeOut = 30) { return driver.FindElements(By.XPath("//*[@class = 'cart-item cart-column']")); }
+        public IWebElement TxtCartItemTitle(int index = 0, int timeOut = 30) { return GetControl(driver, By.XPath("//*[contains(@id,'cart-item-title-" + index + "')]"), timeOut); }
+        public IWebElement ImgCartItemImage(int index = 0, int timeOut = 30) { return GetControl(driver, By.XPath("//*[contains(@id,'cart-item-img-" + index + "')]"), timeOut); }
+        public IWebElement TxtCartItemPrice(int index = 0, int timeOut = 30) { return GetControl(driver, By.XPath("//*[contains(@id,'cart-item-price-" + index + "')]"), timeOut); }
+        public IWebElement TxtCartItemQuantity(int index = 0, int timeOut = 30) { return GetControl(driver, By.XPath("//*[contains(@id,'cart-item-quantity-" + index + "')]"), timeOut); }
 
         #endregion
 
