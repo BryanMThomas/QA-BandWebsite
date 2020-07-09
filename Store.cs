@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 
 namespace QA_BandWebsite
 {
@@ -199,6 +200,60 @@ namespace QA_BandWebsite
             StoreControls.TxtCartItemQuantity().SendKeys(Keys.Down); //decrements 1 value to 0
             //Verify Empty Cart
             Assert.IsNotNull(StoreControls.TxtEmptyCart(), "Cart was not empty after removing all items from the cart");
+        }
+
+        [TestMethod, Description("Verifies the Purchase Flow after adding items to the cart - TC007")]
+        [TestCategory("Regression")]
+        public void PurchaseCartStorePage()
+        {
+            #region Test Setup 
+            var email = "test@bryantest.com";
+            var cc = "4242424242424242";
+            var exp = "08/26";
+            var cvc = "123";
+            //Add item to the cart
+            StoreControls.BtnShopItemAddToCart().Click();
+            #endregion
+
+            #region Make Purchase
+            //Click Purchase Button
+            StoreControls.BtnPurchase().Click();
+            //Switch to Purchase I frame 
+            driver.SwitchTo().Frame("stripe_checkout_app");
+            //Verify Modal is displayed
+            Assert.IsNotNull(StoreControls.PurchaseModal(), "Purchase modal was not displayed after selecting purchase");
+            //Click Pay
+            StoreControls.BtnModalPay().Click();
+            //Verify Modal is still displayed
+            Assert.IsNotNull(StoreControls.PurchaseModal(), "Purchase modal was not displayed after selecting pay with no data entered");
+            //Fill in required fields
+            StoreControls.TxtModalEmail().SendKeys(email);
+            StoreControls.TxtModalCreditCard().SendKeys(cc);
+            StoreControls.TxtModalExpiration().SendKeys(exp);
+            StoreControls.TxtModalCVC().SendKeys(cvc);
+            //Click Pay
+            StoreControls.BtnModalPay().Click();
+            Thread.Sleep(3000);
+            //Verify alert 
+            IAlert alert = null;
+            for (int retryIndex = 0; retryIndex < 5; retryIndex++)
+            {
+                try
+                {
+                    alert = driver.SwitchTo().Alert();
+                    break;
+                }
+                catch (NoAlertPresentException)
+                {
+                    Thread.Sleep(1000);
+                }
+            }
+            Assert.IsTrue(alert.Text.Equals("Successfully Purchased Items"), $"Did not find expected message in alert Expected: Successfully Purchased Items Actual: {alert.Text}");
+            alert.Accept();
+            //Verify Cart is empty
+            driver.SwitchTo().DefaultContent();
+            Assert.IsNotNull(StoreControls.TxtEmptyCart(), "Cart was not empty after removing all items from the cart");
+            #endregion
         }
 
 

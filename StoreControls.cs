@@ -38,6 +38,14 @@ namespace QA_BandWebsite
         public IWebElement TxtCartItemQuantity(int index = 0, int timeOut = 30) { return GetControl(driver, By.XPath("//*[contains(@id,'cart-item-quantity-" + index + "')]"), timeOut); }
         public IWebElement BtnCartItemRemove(int index = 0, int timeOut = 30) { return GetControl(driver, By.XPath("//*[contains(@id,'cart-item-button-" + index + "')]"), timeOut); }
 
+        //Purchase Modal
+        public IWebElement PurchaseModal( int timeOut = 30) { return GetControl(driver, By.ClassName("Modal"), timeOut); }
+        public IWebElement TxtModalEmail(int timeOut = 30) { return GetControl(driver, By.XPath("//*[@placeholder='Email']"), timeOut); }
+        public IWebElement TxtModalCreditCard(int timeOut = 30) { return GetControl(driver, By.XPath("//*[@placeholder='Card number']"), timeOut); }
+        public IWebElement TxtModalExpiration(int timeOut = 30) { return GetControl(driver, By.XPath("//*[@placeholder='MM / YY']"), timeOut); }
+        public IWebElement TxtModalCVC(int timeOut = 30) { return GetControl(driver, By.XPath("//*[@placeholder='CVC']"), timeOut); }
+        public IWebElement BtnModalPay(int timeOut = 30) { return GetControl(driver, By.XPath("//*[@class = 'Button-animationWrapper-child--primary Button']"), timeOut); }
+
         #endregion
 
         #region Methods
