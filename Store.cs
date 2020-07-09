@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 
@@ -113,6 +114,45 @@ namespace QA_BandWebsite
             Assert.IsTrue(expectedTotal == actualTotal, $"Did not find expected total in cart after adding a second item to the cart Expected: {expectedTotal} Actual: {actualTotal}");
             #endregion
         }
+
+        [TestMethod, Description("Verifies behavior for Removing Items to the Cart - TC005")]
+        [TestCategory("Regression")]
+        public void RemoveItemCartStorePage()
+        {
+            #region Test Setup
+            //Add 2 of the same item to the cart  
+            StoreControls.BtnShopItemAddToCart().Click();
+            StoreControls.BtnShopItemAddToCart().Click();
+            //Add 1 of a different item to the cart
+            StoreControls.BtnShopItemAddToCart(2).Click();
+            //Verify items added to the cart
+            Assert.IsTrue(StoreControls.TxtCartItems().Count == 2, $"Additional cart item added after adding an item that was already in the cart. Expected Count: 2 Actual: {StoreControls.TxtCartItems().Count}");
+            #endregion 
+
+            #region First Item
+            //Verify Remove Button is displayed for first item
+            Assert.IsNotNull(StoreControls.BtnCartItemRemove(), $"Remove button not found for first cart item");
+            //Verify Remove Button is displayed for second item 
+            Assert.IsNotNull(StoreControls.BtnCartItemRemove(1), $"Remove button not found for second cart item");
+            //Click Remove for first item and verify new quantity
+            StoreControls.BtnCartItemRemove().Click();
+            Assert.IsTrue(StoreControls.TxtCartItems().Count == 1, $"Cart item not removed after remove was selected. Expected Count: 1 Actual: {StoreControls.TxtCartItems().Count}");
+            //Verify total is updated 
+            var actualTotal = float.Parse(StoreControls.TxtCartTotalPrice().Text.Replace("$", ""));
+            var expectedTotal = int.Parse(StoreControls.TxtCartItemQuantity(1).GetAttribute("value")) * float.Parse(StoreControls.TxtCartItemPrice(1).Text.Replace("$", ""));
+            Assert.IsTrue(expectedTotal == actualTotal, $"Did not find expected total in cart after removing from the cart Expected: {expectedTotal} Actual: {actualTotal}");
+            #endregion
+
+            #region Second Item
+            //Click Remove for second item and verify new quantity
+            StoreControls.BtnCartItemRemove(1).Click();
+            Assert.IsTrue(StoreControls.TxtCartItems().Count == 0, $"Cart item not removed after remove was selected. Expected Count: 0 Actual: {StoreControls.TxtCartItems().Count}");
+            //Verify Empty Cart
+            Assert.IsNotNull(StoreControls.TxtEmptyCart(), "Cart was not empty after removing all items from the cart");
+            #endregion
+
+        }
+
 
         [TestInitialize]
         public void TestIntialize()

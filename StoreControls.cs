@@ -36,6 +36,7 @@ namespace QA_BandWebsite
         public IWebElement ImgCartItemImage(int index = 0, int timeOut = 30) { return GetControl(driver, By.XPath("//*[contains(@id,'cart-item-img-" + index + "')]"), timeOut); }
         public IWebElement TxtCartItemPrice(int index = 0, int timeOut = 30) { return GetControl(driver, By.XPath("//*[contains(@id,'cart-item-price-" + index + "')]"), timeOut); }
         public IWebElement TxtCartItemQuantity(int index = 0, int timeOut = 30) { return GetControl(driver, By.XPath("//*[contains(@id,'cart-item-quantity-" + index + "')]"), timeOut); }
+        public IWebElement BtnCartItemRemove(int index = 0, int timeOut = 30) { return GetControl(driver, By.XPath("//*[contains(@id,'cart-item-button-" + index + "')]"), timeOut); }
 
         #endregion
 
