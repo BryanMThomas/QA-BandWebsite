@@ -153,6 +153,55 @@ namespace QA_BandWebsite
 
         }
 
+        [TestMethod, Description("Verifies behavior for Changing Quantity in the Cart - TC006")]
+        [TestCategory("Regression")]
+        public void QuantityInputCartStorePage()
+        {
+            //Add Item to cart and verify quantity input
+            StoreControls.BtnShopItemAddToCart().Click();
+            Assert.IsNotNull(StoreControls.TxtCartItemQuantity(), "Did not find cart quantity input for cart item");
+
+            //Enter new input value greater than 1
+            StoreControls.TxtCartItemQuantity().Clear();
+            StoreControls.TxtCartItemQuantity().SendKeys("2");
+            StoreControls.TxtCartItemTitle().Click();
+            //Verify new value
+            Assert.IsTrue(StoreControls.TxtCartItemQuantity().GetAttribute("value").Equals("12"), $"Quantity was not as expected. Expected Count: 12 Actual: {StoreControls.TxtCartItemQuantity().Text}");
+            //Verify Total
+            var actualTotal = float.Parse(StoreControls.TxtCartTotalPrice().Text.Replace("$", ""));
+            var expectedTotal = int.Parse(StoreControls.TxtCartItemQuantity(0).GetAttribute("value")) * float.Parse(StoreControls.TxtCartItemPrice(0).Text.Replace("$", ""));
+            Assert.IsTrue(expectedTotal == actualTotal, $"Did not find expected total in cart after removing from the cart Expected: {expectedTotal} Actual: {actualTotal}");
+
+            //Enter new input value less than 1
+            StoreControls.TxtCartItemQuantity().Clear();
+            StoreControls.TxtCartItemQuantity().SendKeys("-1");
+            StoreControls.TxtCartItemTitle().Click();
+            //Verify new value
+            Assert.IsTrue(StoreControls.TxtCartItemQuantity().GetAttribute("value").Equals("1"), $"Quantity was not as expected. Expected Count: 1 Actual: {StoreControls.TxtCartItemQuantity().Text}");
+            //Verify Total
+            actualTotal = float.Parse(StoreControls.TxtCartTotalPrice().Text.Replace("$", ""));
+            expectedTotal = int.Parse(StoreControls.TxtCartItemQuantity(0).GetAttribute("value")) * float.Parse(StoreControls.TxtCartItemPrice(0).Text.Replace("$", ""));
+            Assert.IsTrue(expectedTotal == actualTotal, $"Did not find expected total in cart after removing from the cart Expected: {expectedTotal} Actual: {actualTotal}");
+
+            //Enter alpha input value
+            StoreControls.TxtCartItemQuantity().Clear();
+            StoreControls.TxtCartItemQuantity().SendKeys("abc");
+            StoreControls.TxtCartItemTitle().Click();
+            //Verify new value
+            Assert.IsTrue(StoreControls.TxtCartItemQuantity().GetAttribute("value").Equals("1"), $"Quantity was not as expected. Expected Count: 1 Actual: {StoreControls.TxtCartItemQuantity().Text}");
+            //Verify Total
+            actualTotal = float.Parse(StoreControls.TxtCartTotalPrice().Text.Replace("$", ""));
+            expectedTotal = int.Parse(StoreControls.TxtCartItemQuantity(0).GetAttribute("value")) * float.Parse(StoreControls.TxtCartItemPrice(0).Text.Replace("$", ""));
+            Assert.IsTrue(expectedTotal == actualTotal, $"Did not find expected total in cart after removing from the cart Expected: {expectedTotal} Actual: {actualTotal}");
+
+            //Enter new input value of 0
+            StoreControls.TxtCartItemQuantity().Clear();
+            StoreControls.TxtCartItemQuantity().SendKeys(Keys.Down); //decrements 1 value to 0
+            //Verify Empty Cart
+            Assert.IsNotNull(StoreControls.TxtEmptyCart(), "Cart was not empty after removing all items from the cart");
+        }
+
+
 
         [TestInitialize]
         public void TestIntialize()
